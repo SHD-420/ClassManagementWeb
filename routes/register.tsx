@@ -1,28 +1,46 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { z, ZodError } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { z, ZodError } from "$zod";
+import { createUser, doesUserExistByEmail } from "../db/models/user.ts";
 import TextField from "../islands/form/TextField.tsx";
+import RegisterButton from "../islands/routes/register/RegisterButton.tsx";
+import UserTypeInput from "../islands/routes/register/UserTypeInput.tsx";
 
-type RegisterField = "username" | "email" | "password" | "password_confirm";
+const registerSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  password: z.string().min(4).max(16),
+  password_confirm: z.string().min(4).max(16),
+  type: z.enum(["STAFF", "STUDENT"]),
+});
+
+type RegisterField = keyof z.infer<typeof registerSchema>;
 
 export const handler: Handlers = {
   async POST(req, ctx) {
     const formData = Object.fromEntries((await req.formData()).entries());
     try {
-      const data = z.object({
-        username: z.string(),
-        email: z.string().email(),
-        password: z.string().min(4).max(16),
-        password_confirm: z.string().min(4).max(16),
-      }).parse(formData);
+      const data = registerSchema.parse(formData);
+
+      // custom validations
+      const errors = new Set<RegisterField>();
 
       if (data.password !== data.password_confirm) {
+        errors.add("password_confirm");
+      }
+
+      if (await doesUserExistByEmail(data.email)) {
+        errors.add("email");
+      }
+
+      if (errors.size) {
         return ctx.render({
-          errors: new Set<RegisterField>(["password_confirm"]),
+          errors,
           data: { ...data, password: "", password_confirm: "" },
         });
       }
 
-      console.log(data);
+      const result = await createUser(data);
+      console.log(result);
     } catch (error) {
       if (error instanceof ZodError) {
         return ctx.render({
@@ -40,18 +58,24 @@ export const handler: Handlers = {
 
 export default function Register(
   props: PageProps<
-    { errors?: Set<RegisterField>; data?: Record<RegisterField, string> }
+    {
+      errors?: Set<RegisterField>;
+      data?: z.infer<typeof registerSchema>;
+    }
   >,
 ) {
   return (
-    <div class="max-w-lg mx-auto mt-8">
-      <h1 class="text-6xl font-bold mb-8">Register</h1>
+    <div class="max-w-lg mx-auto mt-4">
+      <img src="/logo.svg" width={64} />
+      <h2 class="text-4xl font-bold mb-8">Register a new user account</h2>
       <form method="POST">
         <div className="space-y-2">
+          <UserTypeInput default={props.data?.data?.type ?? "STUDENT"} />
+
           <TextField
-            value={props.data?.data?.username}
+            value={props.data?.data?.name}
             label="Username"
-            name="username"
+            name="name"
             autoComplete="none"
             required
           />
@@ -83,9 +107,7 @@ export default function Register(
               : null}
           />
         </div>
-        <button class="bg-blue-500 hover:bg-blue-400 text-white w-full py-2 rounded mt-4">
-          Register
-        </button>
+        <RegisterButton />
       </form>
     </div>
   );

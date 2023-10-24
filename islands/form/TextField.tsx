@@ -27,7 +27,7 @@ export default function TextField(
 
   return (
     <div
-      class={cl("stack bg-gray-50 group px-4 focus-within:ring-2 rounded", {
+      class={cl("stack border group px-4 focus-within:ring-2 rounded", {
         "bg-red-50 ring-red-100": hasError,
       })}
     >
@@ -43,7 +43,7 @@ export default function TextField(
         class={cl(
           "group-focus-within:scale-75 group-focus-within:translate-y-0 origin-top-left duration-150 pointer-events-none",
           hasValue.value ? "scale-75 translate-y-0" : "translate-y-4",
-          hasError ? "text-red-400" : null,
+          hasError ? "text-red-400" : "text-gray-600",
         )}
         for={name}
       >
