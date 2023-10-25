@@ -8,7 +8,7 @@ export default function UserTypeInput(props: { default: User["type"] }) {
   return (
     <Select
       label="User Type"
-      fieldName="type"
+      name="type"
       options={["STUDENT", "STAFF"]}
       optionToString={toSentenceCase}
       default={props.default}

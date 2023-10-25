@@ -17,6 +17,7 @@
     "exclude": ["_fresh"]
   },
   "imports": {
+    "$djwt": "https://deno.land/x/djwt@v3.0.0/mod.ts",
     "$bcrypt": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
     "$libsql/": "https://esm.sh/@libsql/client@0.3.3/",
     "$zod": "https://deno.land/x/zod@v3.22.4/mod.ts",

@@ -32,7 +32,7 @@ export default function Button(
       {...props}
       class={cl(
         props.class,
-        "font-medium rounded hover:shadow focus:outline-none active:scale-95 disabled:opacity-75",
+        "font-medium rounded hover:shadow focus:outline-none focus:ring-2 active:scale-95 disabled:opacity-75",
         buttonSizeClass.value,
         buttonColorClass.value,
         {

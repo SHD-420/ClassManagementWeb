@@ -7,7 +7,7 @@ export default function Select<T,>(
     & {
       options: readonly T[];
       label: string;
-      fieldName?: string;
+      name?: string;
       onChange?: (newVal: T) => void;
       default?: T;
     }
@@ -64,7 +64,7 @@ export default function Select<T,>(
             <input
               type="hidden"
               value={selectedOption.value}
-              name={props.fieldName}
+              name={props.name}
             />
           )
           : null}

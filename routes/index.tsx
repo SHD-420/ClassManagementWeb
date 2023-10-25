@@ -1,22 +1,30 @@
 import { useSignal } from "@preact/signals";
 import Counter from "../islands/Counter.tsx";
 import Banner from "../islands/Banner.tsx";
-import { Handlers } from "$fresh/server.ts";
+import { Handlers, PageProps } from "$fresh/server.ts";
+import { getCookies } from "$std/http/cookie.ts";
+import { verify } from "$djwt";
 
 export const handler: Handlers = {
-  async POST(_req, ctx) {
+  async GET(req, ctx) {
+    
     const response = await ctx.render();
+    const authCookie = getCookies(req.headers).auth;
+    if (authCookie) {
+      return ctx.render({
+        message: authCookie
+      });
+    }
     return response;
   },
 };
 
-export default function Home() {
+export default function Home(props: PageProps<{ message?: string }>) {
   const count = useSignal(4);
 
-  
   return (
     <div class="px-4 py-8 mx-auto bg-[#86efac]">
-      <Banner />
+      <Banner message={props.data?.message} />
       <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
         <img
           class="my-6"
