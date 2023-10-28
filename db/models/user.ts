@@ -1,5 +1,5 @@
 import { dbClient } from "../index.ts";
-import { hash } from "$bcrypt";
+import * as bcrypt from "$bcrypt";
 
 export type User = {
   id: number;
@@ -27,7 +27,7 @@ export const migrate = () =>
 export const createUser = async (
   data: Pick<User, "email" | "name" | "type"> & { password: string },
 ): Promise<User> => {
-  const hashedPassword = await hash(data.password);
+  const hashedPassword = await bcrypt.hash(data.password);
   const result = await dbClient.execute({
     sql: "INSERT INTO USERS (NAME, EMAIL, PASSWORD, TYPE) VALUES (?,?,?,?)",
     args: [data.name, data.email, hashedPassword, data.type],
