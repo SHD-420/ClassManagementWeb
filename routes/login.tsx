@@ -2,7 +2,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { z, ZodError } from "$zod";
 import Button from "../islands/form/Button.tsx";
 import TextField from "../islands/form/TextField.tsx";
-import * as bcypt from "$bcrypt";
+import { compareSync } from "$bcrypt";
 import { getUserByEmail } from "../db/models/user.ts";
 import { login } from "../utils/auth.ts";
 import IconExclamationCircle from "$tabler/exclamation-circle.tsx";
@@ -39,7 +39,7 @@ export const handler: Handlers = {
         });
       }
 
-      if (await bcypt.compare(data.password, user.password)) {
+      if (compareSync(data.password, user.password)) {
         return new Response(null, {
           status: 303,
           headers: await login(user, new URL(req.url)),
