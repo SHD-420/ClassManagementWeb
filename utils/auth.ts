@@ -1,5 +1,5 @@
 import { create, verify } from "$djwt";
-import { getCookies, setCookie } from "$std/http/cookie.ts";
+import { deleteCookie, getCookies, setCookie } from "$std/http/cookie.ts";
 import { User } from "../db/models/user.ts";
 
 export type JWTPayload = Pick<User, "name" | "id" | "type">;
@@ -60,6 +60,19 @@ export const login = async (user: JWTPayload, url: URL) => {
 
   // redirect to dashboard after login
   headers.set("location", "/dashboard");
+  return headers;
+};
+
+/**
+ * Get headers required to logout the authenticated user
+ */
+export const logout = (url: URL) => {
+  const headers = new Headers();
+  headers.append("location", "/login");
+  deleteCookie(headers, "auth", {
+    path: "/",
+    domain: url.hostname,
+  });
   return headers;
 };
 

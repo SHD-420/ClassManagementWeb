@@ -147,9 +147,10 @@ const DeleteChannelButton = (
         <Button
           color="danger"
           size="sm"
-          iconLeft={<IconTrash size={24} />}
           onClick={showModalForm}
-        />
+        >
+          <IconTrash size={24} />
+        </Button>
       )}
     >
       <p class="text-gray-600 mb-4">
@@ -170,8 +171,6 @@ const ChannelListItem = (
   props: { channel: ChannelCompact; onDeleted: () => void },
 ) => {
   const channelName = useSignal(props.channel.name);
-
-  const isDeleted = useSignal(false);
 
   return (
     <li class="py-2 flex justify-between">

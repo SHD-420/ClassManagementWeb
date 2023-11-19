@@ -35,9 +35,11 @@ export default function Layout(
               <p>{state.user.name}</p>
               <p class="text-xs capitalize">{state.user.type.toLowerCase()}</p>
             </div>
-            <Button size="sm" color="secondary">
-              <IconLogout />
-            </Button>
+            <form action="/logout" method="POST">
+              <Button size="sm" color="secondary">
+                <IconLogout />
+              </Button>
+            </form>
           </div>
         </nav>
         <div class="px-8 py-4">

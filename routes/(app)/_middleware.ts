@@ -1,6 +1,6 @@
 import { MiddlewareHandlerContext } from "$fresh/server.ts";
-import { deleteCookie } from "$std/http/cookie.ts";
 import { getUserFromReq, JWTPayload } from "../../utils/auth.ts";
+import { logout } from "../../utils/auth.ts";
 
 export type AuthState = {
   user: JWTPayload;
@@ -14,18 +14,10 @@ export async function handler(
     const user = await getUserFromReq(req);
 
     if (!user) {
-
-      // delete auth cookie since it is invalid
-      const headers = new Headers();
-      headers.append("location", "/login");
-      deleteCookie(headers, "auth", {
-        path: "/",
-        domain: new URL(req.url).hostname,
-      });
-
+      // logout since the cookie is invalid
       return new Response(null, {
         status: 307,
-        headers,
+        headers: logout(new URL(req.url)),
       });
     }
 
