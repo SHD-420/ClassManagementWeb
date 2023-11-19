@@ -5,8 +5,10 @@ import config from "./fresh.config.ts";
 
 import "$std/dotenv/load.ts";
 
-// execute all the migrations
-await (await import("./db/models/user.ts")).migrate();
+// execute migrations
+import { migrate } from "./db/index.ts";
+
+await migrate();
 
 
 await dev(import.meta.url, "./main.ts", config);

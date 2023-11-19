@@ -13,7 +13,7 @@ export const migrate = () =>
         CREATE TABLE IF NOT EXISTS USERS (
             ID INTEGER PRIMARY KEY AUTOINCREMENT,
             NAME VARCHAR(80),
-            EMAIL VARCHAR(80),
+            EMAIL VARCHAR(80) NOT NULL UNIQUE,
             PASSWORD VARCHAR(120),
             TYPE VARCHAR(20)
                 DEFAULT "STAFF"
@@ -65,12 +65,13 @@ export const getUserByEmail = async (email: string) => {
     sql: `SELECT 
       ID as id,
       NAME as name,
-      PASSWORD as password
+      PASSWORD as password,
+      TYPE as type
     FROM USERS WHERE EMAIL = ?`,
     args: [email],
   });
   if (!rows.length) return null;
-  return rows[0] as unknown as (Pick<User, "name" | "id"> & {
+  return rows[0] as unknown as (Pick<User, "name" | "id" | "type"> & {
     password: string;
   });
 };

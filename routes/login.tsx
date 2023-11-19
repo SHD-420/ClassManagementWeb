@@ -19,7 +19,7 @@ export const handler: Handlers = {
     if (await getUserFromReq(req)) {
       return new Response(null, {
         status: 307,
-        headers: { Location: "/app/dashboard" },
+        headers: { Location: "/dashboard" },
       });
     }
 

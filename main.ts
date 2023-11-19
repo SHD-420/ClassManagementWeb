@@ -10,8 +10,10 @@ import { start } from "$fresh/server.ts";
 import manifest from "./fresh.gen.ts";
 import config from "./fresh.config.ts";
 
-// execute all the migrations
-await (await import("./db/models/user.ts")).migrate();
+// execute migrations
+import { migrate } from "./db/index.ts";
+
+await migrate();
 
 // start the fresh application
 await start(manifest, config);

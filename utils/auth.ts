@@ -2,13 +2,24 @@ import { create, verify } from "$djwt";
 import { getCookies, setCookie } from "$std/http/cookie.ts";
 import { User } from "../db/models/user.ts";
 
-export type JWTPayload = Pick<User, "name" | "id">;
+export type JWTPayload = Pick<User, "name" | "id" | "type">;
 
-const jwtKey = await crypto.subtle.generateKey(
+// const jwtKey = await crypto.subtle.generateKey(
+//   {
+//     name: "HMAC",
+//     hash: "SHA-512",
+//   },
+//   true,
+//   ["sign", "verify"],
+// );
+
+const jwtKey = await crypto.subtle.importKey(
+  "jwk",
   {
-    name: "HMAC",
-    hash: "SHA-512",
+    kty: "oct",
+    k: "1af8udsLg9KnwESZuVvr6NShmY5TeRyRF2t9yAAogLXV6HMUcTpb9jr3OKK-lLsK8UaPgnHM86w9bYXayjofBdsRz4h3XUH8iGQMzBX82KlKqbsJ0t42zKCE0aOxZUFMBkzZ3L2FwgTKCj4Ffy9GgAHXxdDzsFPLQLwio8Z0_x8",
   },
+  { name: "HMAC", hash: "SHA-512" },
   true,
   ["sign", "verify"],
 );
@@ -29,6 +40,7 @@ export const login = async (user: JWTPayload, url: URL) => {
       user: {
         id: user.id,
         name: user.name,
+        type: user.type,
       },
     },
     jwtKey,
@@ -47,7 +59,7 @@ export const login = async (user: JWTPayload, url: URL) => {
   });
 
   // redirect to dashboard after login
-  headers.set("location", "/app/dashboard");
+  headers.set("location", "/dashboard");
   return headers;
 };
 

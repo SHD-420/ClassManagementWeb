@@ -3,7 +3,7 @@ import { z, ZodError } from "$zod";
 import { createUser, doesUserExistByEmail } from "../db/models/user.ts";
 import Button from "../islands/form/Button.tsx";
 import TextField from "../islands/form/TextField.tsx";
-import UserTypeInput from "../islands/routes/register/UserTypeInput.tsx";
+import UserTypeInput from "../islands/register/UserTypeInput.tsx";
 import { login } from "../utils/auth.ts";
 import { getUserFromReq } from "../utils/auth.ts";
 
@@ -23,7 +23,7 @@ export const handler: Handlers = {
     if (await getUserFromReq(req)) {
       return new Response(null, {
         status: 307,
-        headers: { Location: "/app/dashboard" },
+        headers: { Location: "/dashboard" },
       });
     }
     return ctx.render();

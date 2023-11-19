@@ -3,7 +3,6 @@ import Counter from "../islands/Counter.tsx";
 import Banner from "../islands/Banner.tsx";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { getCookies } from "$std/http/cookie.ts";
-import { verify } from "$djwt";
 
 export const handler: Handlers = {
   async GET(req, ctx) {
