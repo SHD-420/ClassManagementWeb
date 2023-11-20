@@ -6,7 +6,7 @@ import IconEyeOff from "$tabler/eye-off.tsx";
 import { useEffect, useRef } from "preact/hooks";
 
 export default function TextField(
-  { label, name, value, type, disabled, error, ...props }:
+  { label, name, value, type, disabled, error, onInput, ...props }:
     & {
       label: string;
       value?: string;
@@ -14,6 +14,7 @@ export default function TextField(
       name?: string;
       type?: "text" | "email" | "password";
       disabled?: boolean | Signal<boolean>;
+      onInput?: (value: string) => void;
     }
     & Pick<
       JSX.HTMLAttributes<HTMLInputElement>,
@@ -38,6 +39,12 @@ export default function TextField(
   const hasError = typeof error === "string";
 
   const inputElRef = useRef<HTMLInputElement>(null);
+
+  const handleInput = (ev: Event) => {
+    const newVal = (ev.target as HTMLInputElement).value;
+    input.value = newVal;
+    onInput?.(newVal);
+  };
 
   // when corresponding form is reset, make sure to reset the state
   useEffect(() => {
@@ -82,7 +89,7 @@ export default function TextField(
         type={inputType}
         name={name}
         readOnly={isDisabled.value}
-        onInput={(ev) => input.value = (ev.target as HTMLInputElement).value}
+        onInput={handleInput}
         class={cl("bg-transparent py-4 focus:outline-none", {
           "text-red-600": hasError,
           "pointer-events-none opacity-50": isDisabled.value,
