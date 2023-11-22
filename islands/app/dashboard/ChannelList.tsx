@@ -92,9 +92,12 @@ const EditChannelButton = (
     onSave: (newData: { name: string }) => void;
   },
 ) => {
-  const { mutate, isLoading } = useFetchMutation("/api/channel", {
-    method: "PATCH",
-  });
+  const { mutate, isLoading } = useFetchMutation(
+    `api/channel/${props.id}`,
+    {
+      method: "PATCH",
+    },
+  );
 
   return (
     <ModalForm

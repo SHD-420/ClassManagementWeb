@@ -1,12 +1,12 @@
-import { Handlers, PageProps } from "$fresh/server.ts";
-import { z, ZodError } from "$zod";
-import Button from "../islands/form/Button.tsx";
-import TextField from "../islands/form/TextField.tsx";
 import { compareSync } from "$bcrypt";
-import { getUserByEmail } from "../db/models/user.ts";
-import { login } from "../utils/auth.ts";
-import IconExclamationCircle from "$tabler/exclamation-circle.tsx";
-import { getUserFromReq } from "../utils/auth.ts";
+import { Handlers, PageProps } from "$fresh/server.ts";
+import { ZodError, z } from "$zod";
+import { selectOne } from "../db/index.ts";
+import { User } from "../db/models/user.ts";
+import Button from "../islands/form/Button.tsx";
+import ErrorMessage from "../islands/form/ErrorMessage.tsx";
+import TextField from "../islands/form/TextField.tsx";
+import { getUserFromReq, login } from "../utils/auth.ts";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -31,7 +31,19 @@ export const handler: Handlers = {
       const formData = Object.fromEntries((await req.formData()).entries());
       const data = loginSchema.parse(formData);
 
-      const user = await getUserByEmail(data.email);
+      // get user by provided email
+      const user = await selectOne<
+        Pick<User, "id" | "name" | "type"> & { password: string }
+      >({
+        sql: `SELECT 
+        ID as id,
+        NAME as name,
+        PASSWORD as password,
+        TYPE as type
+      FROM USERS WHERE EMAIL = ?`,
+        args: [data.email],
+      });
+
       if (!user) {
         return ctx.render({
           error: "User with specified email was not found!",
@@ -73,16 +85,7 @@ export default function Login(
       <img src="/logo.svg" width={64} />
       <h2 class="text-4xl font-bold mb-8">Login to your dashboard</h2>
       <form method="POST">
-        {props.data?.error && (
-          <div className="bg-red-50 rounded border border-red-100 py-2 px-4 flex space-x-2 items-center mb-4">
-            <p class="text-red-400">
-              <IconExclamationCircle size={16} />
-            </p>
-            <p class="text-red-600 text-sm">
-              {props.data.error}
-            </p>
-          </div>
-        )}
+        <ErrorMessage error={props.data?.error} />
 
         <div className="space-y-2">
           <TextField

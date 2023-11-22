@@ -22,13 +22,3 @@ export const migrate = () =>
         CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 `);
-
-/** Insert a new join request into the database */
-export const createJoinRequest = async (
-  data: Pick<JoinRequest, "channelId" | "userId">,
-) => {
-  await dbClient.execute({
-    sql: `INSERT INTO JOIN_REQUESTS (USER_ID, CHANNEL_ID) VALUES (?, ?)`,
-    args: [data.userId, data.channelId],
-  });
-};

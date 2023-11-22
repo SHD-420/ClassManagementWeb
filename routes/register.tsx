@@ -1,11 +1,11 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { z, ZodError } from "$zod";
-import { createUser, doesUserExistByEmail } from "../db/models/user.ts";
+import { hashSync } from "$bcrypt";
+import { checkExists, insertOne } from "../db/index.ts";
 import Button from "../islands/form/Button.tsx";
 import TextField from "../islands/form/TextField.tsx";
 import UserTypeInput from "../islands/register/UserTypeInput.tsx";
-import { login } from "../utils/auth.ts";
-import { getUserFromReq } from "../utils/auth.ts";
+import { getUserFromReq, login } from "../utils/auth.ts";
 
 const registerSchema = z.object({
   name: z.string(),
@@ -40,7 +40,14 @@ export const handler: Handlers = {
       if (data.password !== data.password_confirm) {
         errors.add("password_confirm");
       }
-      if (await doesUserExistByEmail(data.email)) {
+
+      // check if user with provided email exists or not
+      if (
+        await checkExists({
+          sql: "SELECT 1 FROM USERS WHERE EMAIL = ?",
+          args: [data.email],
+        })
+      ) {
         errors.add("email");
       }
       if (errors.size) {
@@ -50,11 +57,21 @@ export const handler: Handlers = {
         });
       }
 
-      const user = await createUser(data);
+      // insert a new user with provided data into the db
+      const hashedPassword = hashSync(data.password);
+      const newUserId = await insertOne({
+        sql: "INSERT INTO USERS (NAME, EMAIL, PASSWORD, TYPE) VALUES (?,?,?,?)",
+        args: [data.name, data.email, hashedPassword, data.type],
+      });
+      if (!newUserId) return new Response("", { status: 500 });
 
+      // login the newly created user
       return new Response(null, {
         status: 303,
-        headers: await login(user, new URL(req.url)),
+        headers: await login({
+          ...data,
+          id: newUserId,
+        }, new URL(req.url)),
       });
     } catch (error) {
       if (error instanceof ZodError) {

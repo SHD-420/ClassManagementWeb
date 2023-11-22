@@ -29,3 +29,6 @@ export const parseJsonFromReq = async <T>(
     throw error;
   }
 };
+
+export const validationError = (data: unknown) =>
+  new Response(JSON.stringify(data), { status: 400 });

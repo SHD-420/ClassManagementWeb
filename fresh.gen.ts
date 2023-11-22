@@ -20,10 +20,11 @@ import * as $$2 from "./islands/app/dashboard/ChannelList.tsx";
 import * as $$3 from "./islands/app/dashboard/JoinChannelForm.tsx";
 import * as $$4 from "./islands/form/Button.tsx";
 import * as $$5 from "./islands/form/Checkbox.tsx";
-import * as $$6 from "./islands/form/ModalForm.tsx";
-import * as $$7 from "./islands/form/Select.tsx";
-import * as $$8 from "./islands/form/TextField.tsx";
-import * as $$9 from "./islands/register/UserTypeInput.tsx";
+import * as $$6 from "./islands/form/ErrorMessage.tsx";
+import * as $$7 from "./islands/form/ModalForm.tsx";
+import * as $$8 from "./islands/form/Select.tsx";
+import * as $$9 from "./islands/form/TextField.tsx";
+import * as $$10 from "./islands/register/UserTypeInput.tsx";
 
 const manifest = {
   routes: {
@@ -47,10 +48,11 @@ const manifest = {
     "./islands/app/dashboard/JoinChannelForm.tsx": $$3,
     "./islands/form/Button.tsx": $$4,
     "./islands/form/Checkbox.tsx": $$5,
-    "./islands/form/ModalForm.tsx": $$6,
-    "./islands/form/Select.tsx": $$7,
-    "./islands/form/TextField.tsx": $$8,
-    "./islands/register/UserTypeInput.tsx": $$9,
+    "./islands/form/ErrorMessage.tsx": $$6,
+    "./islands/form/ModalForm.tsx": $$7,
+    "./islands/form/Select.tsx": $$8,
+    "./islands/form/TextField.tsx": $$9,
+    "./islands/register/UserTypeInput.tsx": $$10,
   },
   baseUrl: import.meta.url,
 };

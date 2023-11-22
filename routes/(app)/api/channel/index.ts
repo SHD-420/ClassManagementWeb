@@ -1,11 +1,6 @@
 import { Handlers } from "$fresh/server.ts";
 import { z } from "$zod";
-import {
-  createChannel,
-  doesChannelExistByCode,
-  getChannelCreatorId,
-  updateChannel,
-} from "../../../../db/models/channel.ts";
+import { checkExists, insertOne } from "../../../../db/index.ts";
 import { parseJsonFromReq } from "../../../../utils/api.ts";
 import { AuthState } from "../../_middleware.ts";
 
@@ -31,6 +26,12 @@ const getRandomCode = () => {
   return code;
 };
 
+const doesChannelExist = (code: string) =>
+  checkExists({
+    sql: "SELECT 1 FROM CHANNELS WHERE CODE = ?",
+    args: [code],
+  });
+
 export const handler: Handlers<null, AuthState> = {
   // create a channel
   async POST(req, ctx) {
@@ -44,40 +45,26 @@ export const handler: Handlers<null, AuthState> = {
     // generate a unique random channel code if 'autoGenCode' is true
     if (data.autoGenCode === "on") {
       channelCode = getRandomCode();
-      while (await doesChannelExistByCode(channelCode)) {
+      while (await doesChannelExist(channelCode)) {
         channelCode = getRandomCode();
       }
-    } else if (!channelCode || (await doesChannelExistByCode(channelCode))) {
+    } else if (!channelCode || (await doesChannelExist(channelCode))) {
       return new Response(JSON.stringify({ code: "Code already in use" }), {
         status: 400,
       });
     }
-    
-    const channelId = await createChannel({
-      ...data,
-      code: channelCode,
-      creatorId: ctx.state.user.id,
+
+    const newChannelId = await insertOne({
+      sql: "INSERT INTO CHANNELS (NAME, CREATOR_ID, CODE) VALUES (?,?,?)",
+      args: [data.name, ctx.state.user.id, channelCode],
     });
+
+    if (!newChannelId) return new Response("", { status: 500 });
 
     return new Response(JSON.stringify({
       name: data.name,
-      id: channelId,
+      id: newChannelId,
       code: channelCode,
     }));
-  },
-
-  // edit an existing channel
-  async PATCH(req, ctx) {
-    const data = await parseJsonFromReq(req, editChannelSchema);
-    if (data instanceof Response) {
-      return data;
-    }
-
-    if ((await getChannelCreatorId(data.id)) !== ctx.state.user.id) {
-      return new Response("", { status: 401 });
-    }
-
-    await updateChannel(data.id, data);
-    return new Response("ok");
   },
 };
