@@ -8,7 +8,8 @@ export default function ErrorMessage(
     ? props.error
     : props.error?.value;
 
-  if (!errorString) return <></>;
+  // returning fragment breaks the order of elements somehow :(
+  if (!errorString) return <div></div>;
 
   return (
     <div className="bg-red-50 rounded border border-red-100 py-2 px-4 flex space-x-2 items-center mb-4">

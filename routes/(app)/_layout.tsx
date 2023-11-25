@@ -13,8 +13,8 @@ export default function Layout(
   { Component, state, url }: LayoutProps<unknown, AuthState>,
 ) {
   return (
-    <div class="bg-gray-100 min-h-screen py-4">
-      <div className="bg-white rounded-lg max-w-4xl mx-auto shadow">
+    <div class="bg-gray-100 min-h-screen py-4 grid">
+      <div className="bg-white rounded-lg max-w-4xl mx-auto shadow w-full">
         <nav class="flex justify-between py-2 px-8 border-b">
           <div className="flex items-center">
             <h4 class="text-2xl mr-4 font-bold text-blue-600">LOGO</h4>

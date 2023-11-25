@@ -35,6 +35,16 @@ const doesChannelExist = (code: string) =>
 export const handler: Handlers<null, AuthState> = {
   // create a channel
   async POST(req, ctx) {
+    // authenticated user must be off staff
+    if (
+      !(await checkExists({
+        sql: "SELECT 1 FROM USERS WHERE TYPE = 'STAFF' AND ID = ?",
+        args: [ctx.state.user.id],
+      }))
+    ) {
+      return new Response("", { status: 401 });
+    }
+
     const data = await parseJsonFromReq(req, createChannelSchema);
     if (data instanceof Response) {
       return data;
@@ -54,12 +64,19 @@ export const handler: Handlers<null, AuthState> = {
       });
     }
 
+    // insert the channel into db
     const newChannelId = await insertOne({
       sql: "INSERT INTO CHANNELS (NAME, CREATOR_ID, CODE) VALUES (?,?,?)",
       args: [data.name, ctx.state.user.id, channelCode],
     });
 
     if (!newChannelId) return new Response("", { status: 500 });
+
+    // insert the creator as member into the channel
+    await insertOne({
+      sql: "INSERT INTO CHANNEL_USER_PIVOTS (CHANNEL_ID, USER_ID) VALUES (?,?)",
+      args: [newChannelId, ctx.state.user.id],
+    });
 
     return new Response(JSON.stringify({
       name: data.name,

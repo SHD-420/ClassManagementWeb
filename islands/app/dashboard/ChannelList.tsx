@@ -16,9 +16,12 @@ import IconTrash from "$tabler/trash.tsx";
 
 type CreateChannelField = z.infer<typeof createChannelSchema>;
 
-type ChannelCompact = Omit<Channel, "creatorId" | "creator" | "createdAt"> & {
-  createdAt: number | string;
-};
+export type ChannelCompact =
+  & Omit<Channel, "creatorId" | "creator" | "createdAt">
+  & {
+    joinRequestCount?: number;
+    createdAt: number | string;
+  };
 
 const NewChannelButton = (
   props: { onSave: (channel: ChannelCompact) => void },
@@ -29,7 +32,8 @@ const NewChannelButton = (
     Pick<Channel, "id" | "code" | "name">,
     CreateChannelField
   >("/api/channel", {
-    onSuccess: (data) => props.onSave({ ...data, createdAt: Date.now() }),
+    onSuccess: (data) =>
+      props.onSave({ ...data, createdAt: Date.now(), joinRequestCount: 0 }),
   });
 
   return (
@@ -180,7 +184,14 @@ const ChannelListItem = (
       <div>
         <h4 class="font-bold text-2xl text-gray-500">{channelName}</h4>
         <p>{props.channel.code}</p>
-        <p class="text-sm">{formatDate(props.channel.createdAt)}</p>
+        <p>{props.channel.joinRequestCount} pending join requests</p>
+        <a
+          class="text-blue-600 underline"
+          href={`/channel/${props.channel.id}`}
+        >
+          View Channel
+        </a>
+        <p class="text-sm mt-4">{formatDate(props.channel.createdAt)}</p>
       </div>
       <div className="flex items-center space-x-2">
         <EditChannelButton

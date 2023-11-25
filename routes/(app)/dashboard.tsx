@@ -1,52 +1,57 @@
 import { defineRoute } from "$fresh/src/server/defines.ts";
-import { AuthState } from "./_middleware.ts";
 import { selectMany } from "../../db/index.ts";
-import ChannelList from "../../islands/app/dashboard/ChannelList.tsx";
+import ChannelList, {
+  ChannelCompact,
+} from "../../islands/app/dashboard/ChannelList.tsx";
 import JoinChannelForm from "../../islands/app/dashboard/JoinChannelForm.tsx";
-import { Channel } from "../../db/models/channel.ts";
+import { AuthState } from "./_middleware.ts";
 
 export default defineRoute<AuthState>(async function (
   _req,
   ctx,
 ) {
-  const ownedChannels = await selectMany<
-    Pick<
-      Channel,
-      "id" | "name" | "code" | "createdAt"
-    >
-  >({
+  // find all channels joined by the user
+  let channelList = await selectMany<ChannelCompact>({
     sql: `SELECT
     ID AS id,
     NAME AS name,
     CODE AS code,
-    CREATED_AT as createdAt
-    FROM CHANNELS
-    WHERE CREATOR_ID = ?`,
-    args: [ctx.state.user.id],
-  });
-
-  const joinedChannels = await selectMany({
-    sql: `SELECT
-    CHANNELS.ID AS id,
-    CHANNELS.NAME AS name,
-    CHANNELS.CODE AS code,
-    CHANNELS.CREATED_AT AS created_at,
-    USERS.NAME AS 'creator'
-    FROM 
-    (
-      (JOIN_REQUESTS INNER JOIN CHANNELS ON CHANNELS.ID = JOIN_REQUESTS.CHANNEL_ID)
-      INNER JOIN USERS ON USERS.ID = CHANNELS.CREATOR_ID
-    )
-    WHERE JOIN_REQUESTS.USER_ID = ?
+    CREATED_AT AS createdAt
+    FROM CHANNELS WHERE ID IN
+    (SELECT CHANNEL_ID FROM CHANNEL_USER_PIVOTS WHERE USER_ID = ?)
     `,
     args: [ctx.state.user.id],
   });
 
-  console.log(joinedChannels);
+  // if user is a staff, attach joinRequestCount to all channels created by him/her
+  if (ctx.state.user.type === "STAFF") {
+    const createdChannels = await selectMany<
+      { joinRequestCount: number; id: number }
+    >({
+      sql: `SELECT
+      CHANNELS.ID AS id,
+      COUNT(JOIN_REQUESTS.ID) AS joinRequestCount
+      FROM CHANNELS
+      LEFT JOIN JOIN_REQUESTS ON
+      JOIN_REQUESTS.CHANNEL_ID = CHANNELS.ID
+      WHERE CHANNELS.CREATOR_ID = ?
+      GROUP BY CHANNELS.ID
+      `,
+      args: [ctx.state.user.id],
+    });
 
+    createdChannels.forEach(({ id, joinRequestCount }) => {
+      channelList = channelList.map((channel) => {
+        if (channel.id !== id) return channel;
+        return { ...channel, joinRequestCount };
+      });
+    });
+  }
+
+  // TODO: hide new channel button for students
   return (
     <main>
-      <ChannelList initialList={[...ownedChannels]} />
+      <ChannelList initialList={channelList} />
       <div className="py-4"></div>
       <JoinChannelForm />
     </main>

@@ -20,6 +20,7 @@ export const migrate = async () => {
   await (await import("./models/user.ts")).migrate();
   await (await import("./models/channel.ts")).migrate();
   await (await import("./models/joinRequest.ts")).migrate();
+  await (await import("./models/channelUserPivot.ts")).migrate();
 };
 
 //
