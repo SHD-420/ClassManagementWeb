@@ -1,6 +1,6 @@
 import { compareSync } from "$bcrypt";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { ZodError, z } from "$zod";
+import { z, ZodError } from "$zod";
 import { selectOne } from "../db/index.ts";
 import { User } from "../db/models/user.ts";
 import Button from "../islands/form/Button.tsx";

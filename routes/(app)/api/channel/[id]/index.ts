@@ -1,8 +1,8 @@
 import { HandlerContext, Handlers } from "$fresh/server.ts";
 import { z } from "$zod";
-import { dbClient, selectOne } from "../../../../db/index.ts";
-import { parseJsonFromReq, validationError } from "../../../../utils/api.ts";
-import { AuthState } from "../../_middleware.ts";
+import { dbClient, selectOne } from "../../../../../db/index.ts";
+import { parseJsonFromReq, validationError } from "../../../../../utils/api.ts";
+import { AuthState } from "../../../_middleware.ts";
 
 // parse channel id from url params
 // and make sure that creator of that channel is the authenticated user

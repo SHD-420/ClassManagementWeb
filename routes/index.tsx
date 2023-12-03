@@ -6,12 +6,11 @@ import { getCookies } from "$std/http/cookie.ts";
 
 export const handler: Handlers = {
   async GET(req, ctx) {
-    
     const response = await ctx.render();
     const authCookie = getCookies(req.headers).auth;
     if (authCookie) {
       return ctx.render({
-        message: authCookie
+        message: authCookie,
       });
     }
     return response;

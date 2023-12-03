@@ -10,5 +10,4 @@ import { migrate } from "./db/index.ts";
 
 await migrate();
 
-
 await dev(import.meta.url, "./main.ts", config);

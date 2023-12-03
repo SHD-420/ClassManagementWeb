@@ -4,7 +4,7 @@ import { checkExists, dbClient } from "../../../../db/index.ts";
 import { parseJsonFromReq, validationError } from "../../../../utils/api.ts";
 import { AuthState } from "../../_middleware.ts";
 
-// make sure that join request exists 
+// make sure that join request exists
 // and creator of that channel to be joined is the authenticated user
 const authorize = async (
   id: number,

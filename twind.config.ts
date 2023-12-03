@@ -6,11 +6,11 @@ const dialogAnimation = animation(
   {
     from: {
       transform: `translateY(1rem)`,
-      opacity: 0
+      opacity: 0,
     },
     to: {
       transform: `translateY(0)`,
-      opacity: 1
+      opacity: 1,
     },
   },
 );

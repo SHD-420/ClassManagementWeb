@@ -5,19 +5,21 @@
 import * as $0 from "./routes/(app)/_layout.tsx";
 import * as $1 from "./routes/(app)/_middleware.ts";
 import * as $2 from "./routes/(app)/api/channel/[id].ts";
-import * as $3 from "./routes/(app)/api/channel/[id]/join-requests.ts";
-import * as $4 from "./routes/(app)/api/channel/index.ts";
-import * as $5 from "./routes/(app)/api/join/confirm.ts";
-import * as $6 from "./routes/(app)/api/join/decline.ts";
-import * as $7 from "./routes/(app)/api/join/request.ts";
-import * as $8 from "./routes/(app)/channel/[id].tsx";
-import * as $9 from "./routes/(app)/dashboard.tsx";
-import * as $10 from "./routes/(app)/logout.ts";
-import * as $11 from "./routes/_404.tsx";
-import * as $12 from "./routes/_app.tsx";
-import * as $13 from "./routes/index.tsx";
-import * as $14 from "./routes/login.tsx";
-import * as $15 from "./routes/register.tsx";
+import * as $3 from "./routes/(app)/api/channel/[id]/index.ts";
+import * as $4 from "./routes/(app)/api/channel/[id]/join-requests.ts";
+import * as $5 from "./routes/(app)/api/channel/[id]/text-message.ts";
+import * as $6 from "./routes/(app)/api/channel/index.ts";
+import * as $7 from "./routes/(app)/api/join/confirm.ts";
+import * as $8 from "./routes/(app)/api/join/decline.ts";
+import * as $9 from "./routes/(app)/api/join/request.ts";
+import * as $10 from "./routes/(app)/channel/[id].tsx";
+import * as $11 from "./routes/(app)/dashboard.tsx";
+import * as $12 from "./routes/(app)/logout.ts";
+import * as $13 from "./routes/_404.tsx";
+import * as $14 from "./routes/_app.tsx";
+import * as $15 from "./routes/index.tsx";
+import * as $16 from "./routes/login.tsx";
+import * as $17 from "./routes/register.tsx";
 import * as $$0 from "./islands/Banner.tsx";
 import * as $$1 from "./islands/Counter.tsx";
 import * as $$2 from "./islands/Dropdown.tsx";
@@ -37,19 +39,21 @@ const manifest = {
     "./routes/(app)/_layout.tsx": $0,
     "./routes/(app)/_middleware.ts": $1,
     "./routes/(app)/api/channel/[id].ts": $2,
-    "./routes/(app)/api/channel/[id]/join-requests.ts": $3,
-    "./routes/(app)/api/channel/index.ts": $4,
-    "./routes/(app)/api/join/confirm.ts": $5,
-    "./routes/(app)/api/join/decline.ts": $6,
-    "./routes/(app)/api/join/request.ts": $7,
-    "./routes/(app)/channel/[id].tsx": $8,
-    "./routes/(app)/dashboard.tsx": $9,
-    "./routes/(app)/logout.ts": $10,
-    "./routes/_404.tsx": $11,
-    "./routes/_app.tsx": $12,
-    "./routes/index.tsx": $13,
-    "./routes/login.tsx": $14,
-    "./routes/register.tsx": $15,
+    "./routes/(app)/api/channel/[id]/index.ts": $3,
+    "./routes/(app)/api/channel/[id]/join-requests.ts": $4,
+    "./routes/(app)/api/channel/[id]/text-message.ts": $5,
+    "./routes/(app)/api/channel/index.ts": $6,
+    "./routes/(app)/api/join/confirm.ts": $7,
+    "./routes/(app)/api/join/decline.ts": $8,
+    "./routes/(app)/api/join/request.ts": $9,
+    "./routes/(app)/channel/[id].tsx": $10,
+    "./routes/(app)/dashboard.tsx": $11,
+    "./routes/(app)/logout.ts": $12,
+    "./routes/_404.tsx": $13,
+    "./routes/_app.tsx": $14,
+    "./routes/index.tsx": $15,
+    "./routes/login.tsx": $16,
+    "./routes/register.tsx": $17,
   },
   islands: {
     "./islands/Banner.tsx": $$0,
