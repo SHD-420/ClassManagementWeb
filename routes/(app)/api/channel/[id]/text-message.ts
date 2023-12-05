@@ -46,6 +46,8 @@ export const handler: Handlers<null, AuthState> = {
       args: [data.message, userId, channelId],
     });
 
+    await new Promise((r) => setTimeout(r, 2000));
+
     return new Response("ok");
   },
 };

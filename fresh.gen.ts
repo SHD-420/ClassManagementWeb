@@ -24,15 +24,16 @@ import * as $$0 from "./islands/Banner.tsx";
 import * as $$1 from "./islands/Counter.tsx";
 import * as $$2 from "./islands/Dropdown.tsx";
 import * as $$3 from "./islands/app/channel/[id]/JoinRequestsDropdown.tsx";
-import * as $$4 from "./islands/app/dashboard/ChannelList.tsx";
-import * as $$5 from "./islands/app/dashboard/JoinChannelForm.tsx";
-import * as $$6 from "./islands/form/Button.tsx";
-import * as $$7 from "./islands/form/Checkbox.tsx";
-import * as $$8 from "./islands/form/ErrorMessage.tsx";
-import * as $$9 from "./islands/form/ModalForm.tsx";
-import * as $$10 from "./islands/form/Select.tsx";
-import * as $$11 from "./islands/form/TextField.tsx";
-import * as $$12 from "./islands/register/UserTypeInput.tsx";
+import * as $$4 from "./islands/app/channel/[id]/SendMessageForm.tsx";
+import * as $$5 from "./islands/app/dashboard/ChannelList.tsx";
+import * as $$6 from "./islands/app/dashboard/JoinChannelForm.tsx";
+import * as $$7 from "./islands/form/Button.tsx";
+import * as $$8 from "./islands/form/Checkbox.tsx";
+import * as $$9 from "./islands/form/ErrorMessage.tsx";
+import * as $$10 from "./islands/form/ModalForm.tsx";
+import * as $$11 from "./islands/form/Select.tsx";
+import * as $$12 from "./islands/form/TextField.tsx";
+import * as $$13 from "./islands/register/UserTypeInput.tsx";
 
 const manifest = {
   routes: {
@@ -60,15 +61,16 @@ const manifest = {
     "./islands/Counter.tsx": $$1,
     "./islands/Dropdown.tsx": $$2,
     "./islands/app/channel/[id]/JoinRequestsDropdown.tsx": $$3,
-    "./islands/app/dashboard/ChannelList.tsx": $$4,
-    "./islands/app/dashboard/JoinChannelForm.tsx": $$5,
-    "./islands/form/Button.tsx": $$6,
-    "./islands/form/Checkbox.tsx": $$7,
-    "./islands/form/ErrorMessage.tsx": $$8,
-    "./islands/form/ModalForm.tsx": $$9,
-    "./islands/form/Select.tsx": $$10,
-    "./islands/form/TextField.tsx": $$11,
-    "./islands/register/UserTypeInput.tsx": $$12,
+    "./islands/app/channel/[id]/SendMessageForm.tsx": $$4,
+    "./islands/app/dashboard/ChannelList.tsx": $$5,
+    "./islands/app/dashboard/JoinChannelForm.tsx": $$6,
+    "./islands/form/Button.tsx": $$7,
+    "./islands/form/Checkbox.tsx": $$8,
+    "./islands/form/ErrorMessage.tsx": $$9,
+    "./islands/form/ModalForm.tsx": $$10,
+    "./islands/form/Select.tsx": $$11,
+    "./islands/form/TextField.tsx": $$12,
+    "./islands/register/UserTypeInput.tsx": $$13,
   },
   baseUrl: import.meta.url,
 };

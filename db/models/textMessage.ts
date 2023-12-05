@@ -15,7 +15,7 @@ export type TextMessage = {
   channel: Channel;
 };
 
-export const migrate = () => {
+export const migrate = () =>
   dbClient.executeMultiple(`
         CREATE TABLE IF NOT EXISTS TEXT_MESSAGES (
             ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,4 +25,3 @@ export const migrate = () => {
             CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     `);
-};
